@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  db:
+    container_name: db
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+    image: postgres:latest
+    restart: always
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+  web:
+    container_name: web
+    build: .
+    command: /bin/sh docker_dev_start.sh
+    depends_on:
+      - db
+    ports:
+      - '4000:4000'
+    volumes:
+      - .:/app
+    expose:
+      - 4000
